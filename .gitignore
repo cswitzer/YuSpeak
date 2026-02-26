@@ -1,0 +1,44 @@
+# FastAPI
+.idea
+.ipynb_checkpoints
+.mypy_cache
+.vscode
+__pycache__
+.pytest_cache
+htmlcov
+site
+.coverage*
+coverage.xml
+test.db
+log.txt
+Pipfile.lock
+env3.*
+env
+docs_build
+site_build
+venv
+docs.zip
+archive.zip
+
+# vim temporary files
+*~
+.*.sw?
+.cache
+
+# macOS
+.DS_Store
+
+.codspeed
+
+# Vite/Node
+node_modules
+dist
+.vite
+stats.html
+.eslintcache
+*.log
+
+# Env files
+.env
+.env.*
+*.local

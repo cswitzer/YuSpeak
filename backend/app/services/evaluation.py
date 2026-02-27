@@ -1,6 +1,7 @@
 from fastapi import HTTPException
 from app.services.openai_client import client
 from app.core.logging import logger
+from app.schemas.evaluation import EvaluationResponse
 
 
 EVALUTION_PROMPT = """
@@ -16,10 +17,11 @@ Focus on correctness AND how a native speaker would actually say it.
 
 You must return valid JSON only in this format:
 {
+  "overall_score": 0-10,
   "grammar_score": 0-10,
-  "word_usage_score": 0-10,
-  "naturalness_score": 0-10,
-  "errors": [
+  "vocabulary_score": 0-10,
+  "fluency_score": 0-10,
+  "mistakes": [
     {
       "type": "grammar|word_usage|word_order|unnatural_expression",
       "original": "...",
@@ -35,16 +37,17 @@ Do not include explanations outside the JSON.
 """
 
 
-async def evaluate_speech(text: str) -> dict:
+async def evaluate_speech(text: str) -> EvaluationResponse:
     try:
-        evaluation = await client.responses.create(
+        evaluation = await client.responses.parse(
             model="gpt-4o",
             input=[
                 {"role": "system", "content": EVALUTION_PROMPT},
                 {"role": "user", "content": text},
             ],
+            text_format=EvaluationResponse,
         )
-        return evaluation.output_text
+        return evaluation
     except Exception as e:
         logger.error(f"Evaluation failed: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Evaluation failed: {str(e)}")

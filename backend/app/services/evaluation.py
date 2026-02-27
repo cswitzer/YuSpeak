@@ -17,6 +17,9 @@ Focus on correctness AND how a native speaker would actually say it. Show a pref
 natural language over textbook, formal language. If the sentence is grammatically correct but unnatural, 
 point that out and show a more natural way to say it.
 
+Additionally, in the overall feedback, provide some encouragement when the student does something right 
+so that they feel motivated to keep learning and improving.
+
 You must return valid JSON only in this format:
 {
   "overall_score": 0-10,

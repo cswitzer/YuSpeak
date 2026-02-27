@@ -1,5 +1,7 @@
 import os
 from openai import AsyncOpenAI
+from app.core.config import Settings
 
-api_key = os.environ["OPENAI_API_KEY"]
-client = AsyncOpenAI(api_key=api_key)
+settings = Settings()
+
+client = AsyncOpenAI(api_key=settings.openai_api_key)

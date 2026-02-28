@@ -34,6 +34,7 @@ You must return valid JSON only in this format:
       "explanation": "English explanation"
     }
   ],
+  "original_sentence": "...",
   "corrected_sentence": "...",
   "more_natural_native_version": "...",
   "overall_feedback": "..."

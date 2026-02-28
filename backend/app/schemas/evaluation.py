@@ -1,5 +1,7 @@
 from pydantic import BaseModel
-from typing import List
+from typing import List, Optional
+
+from app.schemas.pronunciation import PronunciationResult
 
 
 class Mistake(BaseModel):
@@ -19,3 +21,6 @@ class EvaluationResponse(BaseModel):
     corrected_sentence: str
     more_natural_native_version: str
     overall_feedback: str
+
+    # From Azure Pronunciation Assessment API
+    pronunciation: Optional[PronunciationResult] = None

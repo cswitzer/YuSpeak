@@ -13,6 +13,9 @@ async def analyze_speech(file: UploadFile = File(...)):
         transcript = await transcribe_audio(
             file.filename, audio_bytes=audio_bytes, content_type=file.content_type
         )
+
+        # TODO: Run this and the azure pronunciation assessment in parallel to save time
+        # Combine the results in the final output after asyncio.gather completes
         evaluation = await evaluate_speech(transcript)
         return evaluation.output[0].content[0].parsed.dict()
     except Exception as e:

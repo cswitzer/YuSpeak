@@ -21,6 +21,3 @@ class EvaluationResponse(BaseModel):
     corrected_sentence: str
     more_natural_native_version: str
     overall_feedback: str
-
-    # From Azure Pronunciation Assessment API
-    pronunciation: Optional[PronunciationResult] = None

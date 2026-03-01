@@ -1,6 +1,7 @@
 import azure.cognitiveservices.speech as speechsdk
 import asyncio
 import json
+from app.utils.wave import get_audio_format
 
 from app.core.config import Settings
 
@@ -14,7 +15,8 @@ async def analyze_pronunciation(
         subscription=settings.azure_speech_key, region=settings.azure_speech_region
     )
 
-    stream = speechsdk.audio.PushAudioInputStream()
+    audio_format = speechsdk.audio.AudioStreamFormat(**get_audio_format(audio_bytes))
+    stream = speechsdk.audio.PushAudioInputStream(audio_format)
     stream.write(audio_bytes)
     stream.close()
 

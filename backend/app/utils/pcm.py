@@ -21,6 +21,10 @@ def convert_to_pcm(audio_bytes: bytes) -> bytes:
     Since the output has no header describing its format, the caller must tell
     Azure what to expect via AudioStreamFormat(samples_per_second=16000,
     bits_per_sample=16, channels=1).
+
+    Although slower, using a temporary file is more reliable than piping audio_bytes directly to ffmpeg's stdin.
+    Some formats (like M4A and WebM) store metadata at the end of the file. Pipes only allow sequential reads,
+    so ffmpeg can't seek back to find it. A temp file allows ffmpeg to seek freely.
     """
     with tempfile.NamedTemporaryFile(delete=False) as tmp:
         tmp.write(audio_bytes)

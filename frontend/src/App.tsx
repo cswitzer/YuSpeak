@@ -5,8 +5,10 @@ const queryClient = new QueryClient();
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <div>
-        <p>Hello World</p>
+      <div className="grid">
+        <div className="text-2xl font-bold">Yuspeak</div>
+        <div className="text-2xl font-bold">Yuspeak</div>
+        <div className="text-2xl font-bold">Yuspeak</div>
       </div>
     </QueryClientProvider>
   );

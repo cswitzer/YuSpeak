@@ -6,29 +6,37 @@ import {
   Download,
   Trash2,
   Volume2,
+  Send,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { useAudioRecorder } from "@/hooks/useAudioRecorder";
+import { useState } from "react";
 
 interface AudioRecorderUIProps {
   className?: string;
   maxDuration?: number;
-  onRecordingComplete?: (audioBlob: Blob) => void;
+  onAnalyze?: (audioBlob: Blob) => void;
   onError?: (error: string) => void;
+  isAnalyzing?: boolean;
 }
 
 export function AudioRecorderUI({
   className,
   maxDuration = 30,
-  onRecordingComplete,
+  onAnalyze,
   onError,
+  isAnalyzing = false,
 }: AudioRecorderUIProps) {
+  const [currentAudioBlob, setCurrentAudioBlob] = useState<Blob | null>(null);
+
   const recorder = useAudioRecorder({
     maxDuration,
-    onRecordingComplete,
+    onRecordingComplete: (blob) => {
+      setCurrentAudioBlob(blob);
+    },
     onError,
   });
 
@@ -107,7 +115,7 @@ export function AudioRecorderUI({
               onClick={startRecording}
               size="lg"
               className="bg-red-600 hover:bg-red-700 text-white"
-              disabled={isPlaying}
+              disabled={isPlaying || isAnalyzing}
             >
               <Mic className="h-4 w-4" />
               Record
@@ -151,12 +159,12 @@ export function AudioRecorderUI({
         {/* Playback Controls (only visible when recording exists) */}
         {recordingComplete && audioUrl && (
           <div className="pt-4 border-t space-y-3">
-            <div className="flex justify-center gap-2">
+            <div className="flex justify-center gap-2 flex-wrap">
               {!isPlaying ? (
                 <Button
                   onClick={playRecording}
                   variant="outline"
-                  disabled={isRecording}
+                  disabled={isRecording || isAnalyzing}
                 >
                   <Play className="h-4 w-4" />
                   Play
@@ -171,19 +179,37 @@ export function AudioRecorderUI({
               <Button
                 onClick={downloadRecording}
                 variant="outline"
-                disabled={isRecording}
+                disabled={isRecording || isAnalyzing}
               >
                 <Download className="h-4 w-4" />
                 Download
               </Button>
 
               <Button
-                onClick={clearRecording}
+                onClick={() => {
+                  clearRecording();
+                  setCurrentAudioBlob(null);
+                }}
                 variant="outline"
                 size="icon"
-                disabled={isRecording}
+                disabled={isRecording || isAnalyzing}
               >
                 <Trash2 className="h-4 w-4" />
+              </Button>
+            </div>
+
+            {/* Analyze Button */}
+            <div className="flex justify-center">
+              <Button
+                onClick={() =>
+                  currentAudioBlob && onAnalyze?.(currentAudioBlob)
+                }
+                className="bg-blue-600 hover:bg-blue-700 text-white"
+                disabled={isRecording || isAnalyzing || !currentAudioBlob}
+                size="lg"
+              >
+                <Send className="h-4 w-4" />
+                {isAnalyzing ? "Analyzing..." : "Analyze Speech"}
               </Button>
             </div>
           </div>
@@ -200,7 +226,8 @@ export function AudioRecorderUI({
         {recordingComplete && !error && (
           <div className="p-3 bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800 rounded-lg">
             <p className="text-sm text-green-700 dark:text-green-300 text-center">
-              ✓ Recording complete! You can now play, download, or clear it.
+              ✓ Recording complete! Play it back, then click "Analyze Speech" to
+              get feedback.
             </p>
           </div>
         )}

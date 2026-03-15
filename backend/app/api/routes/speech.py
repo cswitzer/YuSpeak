@@ -26,7 +26,7 @@ async def analyze_speech(file: UploadFile = File(...)):
         )
 
         return AnalysisResponse(
-            evaluation=evaluation_result.output[0].content[0].parsed.dict(),
+            evaluation=evaluation_result.output[0].content[0].parsed,
             pronunciation=pronunciation_result,
         )
     except Exception as e:

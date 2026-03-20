@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { AudioRecorderUI } from "./components/AudioRecorder";
-import { analyzeSpeech } from "./services/speechService";
+import { AudioRecorderUI } from "@/components/AudioRecorder";
+import { analyzeSpeech } from "@/services/speechService";
 import { useState } from "react";
 
 const queryClient = new QueryClient();

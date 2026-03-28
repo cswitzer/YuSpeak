@@ -46,18 +46,13 @@ export interface AnalysisResponse {
 
 export const analyzeSpeech = async (
   audioBlob: Blob,
-  filename?: string,
 ): Promise<AnalysisResponse> => {
   const formData = new FormData();
 
   // Create a file from the blob with a proper name
-  const audioFile = new File(
-    [audioBlob],
-    filename || `recording-${Date.now()}.webm`,
-    {
-      type: audioBlob.type || "audio/webm",
-    },
-  );
+  const audioFile = new File([audioBlob], `recording-${Date.now()}.webm`, {
+    type: audioBlob.type || "audio/webm",
+  });
 
   formData.append("file", audioFile);
 

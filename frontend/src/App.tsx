@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AudioRecorderUI } from "@/components/AudioRecorder";
 import { analyzeSpeech } from "@/services/speechService";
 import { useState } from "react";
+import { toast } from "sonner";
 
 const queryClient = new QueryClient();
 
@@ -11,10 +12,12 @@ function App() {
   const handleAnalyze = async (blob: Blob) => {
     try {
       setIsAnalyzing(true);
-      console.log("Sending audio for analysis...");
+      toast.loading("Analyzing speech...");
       const result = await analyzeSpeech(blob);
+      toast.success("Analysis complete!");
       console.log("Analysis result:", result);
     } catch (error) {
+      toast.error("Failed to analyze speech.");
       console.error("Failed to analyze speech:", error);
     } finally {
       setIsAnalyzing(false);
